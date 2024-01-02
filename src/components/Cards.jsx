@@ -5,6 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 export function Cards() {
 
   const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,10 +31,14 @@ export function Cards() {
     fetchData();
   }, []);
 
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
+
 return (
     <div className="gap-2 grid grid-cols-1 sm:grid-cols-4">
       {products.map((product, index) => (
-        <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+        <Card className="cursor-default" shadow="sm" key={index}  onPress={() => console.log("item pressed")}>
           <CardBody className="overflow-visible p-0">
             <Image
               shadow="sm"
@@ -47,7 +52,7 @@ return (
           <CardFooter className="text-small justify-between">
             <b>{product.nombre}</b>
             <button>
-            <FaShoppingCart />
+            <FaShoppingCart className="" />
             </button>
             <p className="text-default-500">${product.precio}</p>
           </CardFooter>
