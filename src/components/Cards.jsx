@@ -6,7 +6,6 @@ import { CartContext } from "../contexts/ShoppingCartContext";
 export function Cards() {
 
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,19 +33,39 @@ export function Cards() {
 
   const [cart, setCart] = useContext(CartContext);
 
-  const addToCart = () => {
+  const addToCart = (id, price) => {
     setCart((currItems) => {
       const isItemsFound = currItems.find((item) => item.id === id);
-      if(isItemsFound)
-      return currItems.map((item) => {
-    if(item.id === id){
-      return{...item, quantity: item.quantity + 1};
-    } else {
-      return [...currItems, {id, quantity: 1, precio}]
-    }
-  })
-    })
-  }
+      if (isItemsFound) {
+        return currItems.map((item) => {
+          if (item.id === id) {
+            return { ...item, quantity: item.quantity + 1 };
+          } else {
+            return item;
+          }
+        });
+      } else {
+        return [...currItems, { id, quantity: 1, price }];
+      }
+    });
+  };
+
+  const removeItem = (id) => {
+    setCart((currItems) => {
+      if (currItems.find((item) => item.id === id)?.quantity === 1) {
+        return currItems.filter((item) => item.id !== id);
+      } else {
+        return currItems.map((item) => {
+          if (item.id === id) {
+            return { ...item, quantity: item.quantity - 1 };
+          } else {
+            return item;
+          }
+        });
+      }
+    });
+  };
+
 return (
     <div className="gap-2 grid grid-cols-1 sm:grid-cols-4">
       {products.map((product, index) => (
@@ -65,7 +84,9 @@ return (
             <b>{product.nombre}</b>
             <p className="text-default-500">${product.precio}</p>
             <button>
-            <FaShoppingCart onClick={() => addToCart()} />
+              
+            <FaShoppingCart onClick={() =>{
+              addToCart(product.id, product.precio)}} />             
             </button>
           </CardFooter>
         </Card>

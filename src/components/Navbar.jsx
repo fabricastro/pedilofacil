@@ -1,9 +1,19 @@
+import React, { useContext } from "react";
+import { CartContext } from "../contexts/ShoppingCartContext";
+
 export const Navbar = () => {
+
+  const [cart, setCart] = useContext(CartContext);
+
+  const quantity = cart.reduce((acc, curr) =>{
+    return acc + curr.quantity;
+  }, 0);
+
   return (
     <div className="fixed bottom-0 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2 border border-gray-200  bg-white dark:border-gray-600 dark:bg-gray-700 md:max-w-none">
       <div className="mx-auto grid items-center h-full max-w-lg grid-cols-2">
         <div className="text-center">
-        <h1>Productos:</h1>
+        <h1>Productos: {quantity}</h1>
         </div>
         
         <button
