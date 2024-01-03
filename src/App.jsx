@@ -1,14 +1,17 @@
 import { Header } from "./components/Header";
 import { Main } from "./components/Main";
-import {NextUIProvider} from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
+import { ShoppingCartProvider } from "./contexts/ShoppingCartContext";
 
 function App() {
   return (
     <>
-    <NextUIProvider>
-      <Header></Header>
-      <Main></Main>
-    </NextUIProvider>
+      <ShoppingCartProvider>
+        <NextUIProvider>
+          <Header></Header>
+          <Main></Main>
+        </NextUIProvider>
+      </ShoppingCartProvider>
     </>
   );
 }

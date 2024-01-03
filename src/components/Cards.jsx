@@ -1,6 +1,7 @@
 import {Card, CardBody, CardFooter, Image} from "@nextui-org/react";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaShoppingCart } from "react-icons/fa";
+import { CartContext } from "../contexts/ShoppingCartContext";
 
 export function Cards() {
 
@@ -31,10 +32,21 @@ export function Cards() {
     fetchData();
   }, []);
 
-  const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
-  };
+  const [cart, setCart] = useContext(CartContext);
 
+  const addToCart = () => {
+    setCart((currItems) => {
+      const isItemsFound = currItems.find((item) => item.id === id);
+      if(isItemsFound)
+      return currItems.map((item) => {
+    if(item.id === id){
+      return{...item, quantity: item.quantity + 1};
+    } else {
+      return [...currItems, {id, quantity: 1, precio}]
+    }
+  })
+    })
+  }
 return (
     <div className="gap-2 grid grid-cols-1 sm:grid-cols-4">
       {products.map((product, index) => (
@@ -51,10 +63,10 @@ return (
           </CardBody>
           <CardFooter className="text-small justify-between">
             <b>{product.nombre}</b>
-            <button>
-            <FaShoppingCart className="" />
-            </button>
             <p className="text-default-500">${product.precio}</p>
+            <button>
+            <FaShoppingCart onClick={() => addToCart()} />
+            </button>
           </CardFooter>
         </Card>
       ))}
