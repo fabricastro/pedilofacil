@@ -1,16 +1,18 @@
-import {Card, CardBody, CardFooter, Image} from "@nextui-org/react";
-import { useContext, useEffect, useState } from 'react';
+import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { useContext, useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { FaMinus, FaPlus  } from "react-icons/fa6";
 import { CartContext } from "../contexts/ShoppingCartContext";
 
 export function Cards() {
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJglE4Bfma7jTFTcmX5VoNB7nNBJr-s-9cAEjaa8aCmAPBijOqZuHXdRBbBIlXHTpm0EL2jQNTvax/pub?output=csv');
+        const response = await fetch(
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFJglE4Bfma7jTFTcmX5VoNB7nNBJr-s-9cAEjaa8aCmAPBijOqZuHXdRBbBIlXHTpm0EL2jQNTvax/pub?output=csv",
+        );
         const csv = await response.text();
 
         const parsedProducts = csv
@@ -24,69 +26,64 @@ export function Cards() {
         setProducts(parsedProducts);
         console.log(parsedProducts);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, []);
 
-  const [cart, setCart] = useContext(CartContext);
 
-  const addToCart = (id, price) => {
-    setCart((currItems) => {
-      const isItemsFound = currItems.find((item) => item.id === id);
-      if (isItemsFound) {
-        return currItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 };
-          } else {
-            return item;
-          }
-        });
-      } else {
-        return [...currItems, { id, quantity: 1, price }];
-      }
-    });
-  };
+  const [cart, setCart, addToCart, removeItem, getQuantityById] = useContext(CartContext);
 
-  const removeItem = (id) => {
-    setCart((currItems) => {
-      if (currItems.find((item) => item.id === id)?.quantity === 1) {
-        return currItems.filter((item) => item.id !== id);
-      } else {
-        return currItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
-  };
 
-return (
-    <div className="gap-2 grid grid-cols-1 sm:grid-cols-4">
+  return (
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
       {products.map((product, index) => (
-        <Card className="cursor-default" shadow="sm" key={index}  onPress={() => console.log("item pressed")}>
+        <Card
+          className="cursor-default"
+          shadow="sm"
+          key={index}
+        >
           <CardBody className="overflow-visible p-0">
+            {getQuantityById(product.id) > 0 && 
+            <>
+              <span className="absolute right-3 top-3 z-50 rounded-full bg-white px-2">
+                {getQuantityById(product.id)}
+              </span>
+            <button className="absolute z-50 left-3 top-3 border-1 border-black rounded-md" onClick={() => removeItem(product.id, product.price)}>
+            <FaMinus
+              className="text-xl bg-white rounded-md p-1" 
+              />
+            </button>
+            <button className="absolute z-50 left-9 top-3 border-1 border-black rounded-md"  
+            onClick={() => {
+              addToCart(product.id, product.precio);
+            }}>
+              <FaPlus  
+              className="text-xl bg-white rounded-md p-1 "
+              />
+            </button>
+              </>
+            }
             <Image
               shadow="sm"
               radius="lg"
               width="100%"
               alt=""
-              className="w-full object-cover h-[140px]"
+              className="h-[140px] w-full object-cover"
               src={product.imagen}
             />
           </CardBody>
-          <CardFooter className="text-small justify-between">
+          <CardFooter className="justify-between text-small">
             <b>{product.nombre}</b>
             <p className="text-default-500">${product.precio}</p>
             <button>
-              
-            <FaShoppingCart onClick={() =>{
-              addToCart(product.id, product.precio)}} />             
+              <FaShoppingCart
+                onClick={() => {
+                  addToCart(product.id, product.precio);
+                }}
+              />
             </button>
           </CardFooter>
         </Card>
@@ -94,4 +91,3 @@ return (
     </div>
   );
 }
-
