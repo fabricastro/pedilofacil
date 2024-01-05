@@ -81,7 +81,7 @@ export function Cards() {
             <button>
               <FaShoppingCart
                 onClick={() => {
-                  addToCart(product.id, product.precio);
+                  addToCart(product.id, product.precio, product.nombre);
                 }}
               />
             </button>

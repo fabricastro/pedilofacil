@@ -13,7 +13,6 @@ function App() {
           <Route path="/" element={<Home></Home>} ></Route>
           <Route path="/Carrito" element={<Cart></Cart>} ></Route>
         </Routes>
-          
         </NextUIProvider>
       </ShoppingCartProvider>
     </>
