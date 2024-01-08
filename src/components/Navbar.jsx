@@ -3,11 +3,9 @@ import { CartContext } from "../contexts/ShoppingCartContext";
 import { Link, useLocation } from "react-router-dom";
 import { BsCartXFill } from "react-icons/bs";
 
-export const Navbar = ({ customName }) => {
+export const Navbar = ({ customName, customerLocation, setShowNameAlertName, setShowNameAlertUbi }) => {
   const [cart, setCart] = useContext(CartContext);
   const location = useLocation();
-
-  const [customerLocation, setCustomerLocation] = useState(null);
 
   const quantity = cart.reduce((acc, curr) => {
     return acc + curr.quantity;
@@ -19,8 +17,15 @@ export const Navbar = ({ customName }) => {
   }, 0);
 
   const handleWhatsapp = () => {
+    if (!customName || !customerLocation) {
+      setShowNameAlertName(!customName);
+      setShowNameAlertUbi(!customerLocation);
+      return;
+    }
+  
+
     const message = `Hola, me gustaría realizar un pedido. Cliente: ${customName}. Ubicación: ${
-      customerLocation ? `https://www.google.com/maps?q=${customerLocation.latitude},${customerLocation.longitude}` : "No proporcionada"
+      customerLocation ? `https://www.google.com/maps?q=${customerLocation.latitude},${customerLocation.longitude}\n` : "No proporcionada"
      }. Productos: ${cart.map(
         (product) =>
           `${product.nombre} x${product.quantity} - $${(
@@ -30,24 +35,11 @@ export const Navbar = ({ customName }) => {
       .join("")}| Total: $${totalCartPrice.toFixed(2)}`;
 
     window.open(
-      `https://wa.me/5492646270803/?text=${encodeURIComponent(message)}`,
+      `https://wa.me/5492646270803/?text=${encodeURIComponent(message)}`, 
     );
   };
 
-  const handleShareLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCustomerLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.error("Error getting location:", error.message);
-        // Puedes manejar el error aquí, por ejemplo, mostrando un mensaje al usuario.
-      }
-    );
-  };
+  
 
   return (
     <div className="fixed bottom-0 left-1/2 z-50 flex h-20 w-full -translate-x-1/2 items-center  justify-center  border border-gray-200 bg-white text-center md:max-w-none">
@@ -84,12 +76,7 @@ export const Navbar = ({ customName }) => {
           >
             Realizar pedido
           </button>
-          <button
-            className="rounded-lg bg-blue-500 px-5 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
-            onClick={handleShareLocation}
-          >
-            Compartir ubicación
-          </button>
+          
         </div>
       )}
     </div>

@@ -9,6 +9,13 @@ export const Cart = () => {
   const [cart, setCart] = useContext(CartContext);
 
   const [customerName, setCustomerName] = useState("");
+  const [customerLocation, setCustomerLocation] = useState(null);
+
+  const [buttonColor, setButtonColor] = useState("bg-yellow-400");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [showNameAlertName, setShowNameAlertName] = useState(false);
+  const [showNameAlertUbi, setShowNameAlertUbi] = useState(false);
+
 
   const handleInput = (inputValue) => {
     if (/^[a-zA-Z\s]*$/.test(inputValue)) {
@@ -37,16 +44,23 @@ export const Cart = () => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
+        setButtonDisabled(true);
+        setButtonColor("bg-green-400");
       },
       (error) => {
-        console.error("Error al obtener la direccion:", error.message);
+        console.error("Error getting location:", error.message);
       },
     );
   };
 
   return (
     <>
-      <Navbar customName={customerName}></Navbar>
+      <Navbar
+        customName={customerName}
+        customerLocation={customerLocation}
+        setShowNameAlertName={setShowNameAlertName}
+        setShowNameAlertUbi={setShowNameAlertUbi}
+      ></Navbar>
       {/* Header */}
       <div className="border-b-2 pb-3">
         <Link to={"/"} className="absolute pl-4 pt-6">
@@ -74,17 +88,35 @@ export const Cart = () => {
             </div>
           );
         })}
-        <div className="mx-3 my-2">
+        <div className="mx-3 my-2 flex flex-col gap-4">
           <h5>Datos de envío</h5>
           <Input
+            color="primary"
             type="text"
             required
             pattern="[a-zA-Z\s]+"
             value={customerName}
             onChange={(e) => handleInput(e.target.value)}
-            label="Ingrese su nombre"
+            label="*Ingrese su nombre"
             title="Por favor, ingrese un nombre válido (solo letras y espacios)"
           />
+          {showNameAlertName && (
+            <p className="text-sm text-red-500">
+              Por favor, ingrese un nombre válido.
+            </p>
+          )}
+          <button
+            className={`rounded-lg ${buttonColor} px-5 py-2 text-sm font-medium text-white`}
+            onClick={handleShareLocation}
+            disabled={buttonDisabled}
+          >
+            Compartir ubicación
+          </button>
+          {showNameAlertUbi && (
+            <p className="text-sm text-red-500">
+              Por favor, comparta la ubicación.
+            </p>
+          )}
         </div>
       </div>
     </>
