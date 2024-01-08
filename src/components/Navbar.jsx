@@ -3,10 +3,11 @@ import { CartContext } from "../contexts/ShoppingCartContext";
 import { Link, useLocation } from "react-router-dom";
 import { BsCartXFill } from "react-icons/bs";
 
-export const Navbar = ({customName}) => {
+export const Navbar = ({ customName }) => {
   const [cart, setCart] = useContext(CartContext);
   const location = useLocation();
 
+  const [customerLocation, setCustomerLocation] = useState(null);
 
   const quantity = cart.reduce((acc, curr) => {
     return acc + curr.quantity;
@@ -18,16 +19,34 @@ export const Navbar = ({customName}) => {
   }, 0);
 
   const handleWhatsapp = () => {
-    const message = `Hola, me gustaría realizar un pedido. Cliente: ${customName}. Productos: ${cart
-      .map(
+    const message = `Hola, me gustaría realizar un pedido. Cliente: ${customName}. Ubicación: ${
+      customerLocation ? `https://www.google.com/maps?q=${customerLocation.latitude},${customerLocation.longitude}` : "No proporcionada"
+     }. Productos: ${cart.map(
         (product) =>
           `${product.nombre} x${product.quantity} - $${(
             product.price * product.quantity
-          ).toFixed(2)}\n`
+          ).toFixed(2)}\n`,
       )
       .join("")}| Total: $${totalCartPrice.toFixed(2)}`;
 
-    window.open(`https://wa.me/5492644601971/?text=${encodeURIComponent(message)}`);
+    window.open(
+      `https://wa.me/5492646270803/?text=${encodeURIComponent(message)}`,
+    );
+  };
+
+  const handleShareLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCustomerLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error("Error getting location:", error.message);
+        // Puedes manejar el error aquí, por ejemplo, mostrando un mensaje al usuario.
+      }
+    );
   };
 
   return (
@@ -59,10 +78,17 @@ export const Navbar = ({customName}) => {
             {" "}
             Total: ${totalCartPrice.toFixed(2)}{" "}
           </p>
-          <button className=" me-2 rounded-lg bg-red-700 px-5 py-2 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  onClick={handleWhatsapp}
+          <button
+            className=" me-2 rounded-lg bg-red-700 px-5 py-2 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+            onClick={handleWhatsapp}
           >
             Realizar pedido
+          </button>
+          <button
+            className="rounded-lg bg-blue-500 px-5 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            onClick={handleShareLocation}
+          >
+            Compartir ubicación
           </button>
         </div>
       )}

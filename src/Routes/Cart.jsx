@@ -10,6 +10,12 @@ export const Cart = () => {
 
   const [customerName, setCustomerName] = useState("");
 
+  const handleInput = (inputValue) => {
+    if (/^[a-zA-Z\s]*$/.test(inputValue)) {
+      setCustomerName(inputValue);
+    }
+  };
+
   // Calcula el total de un producto específico
   const calculateProductTotal = (quantity, price) => {
     return quantity * price;
@@ -21,7 +27,7 @@ export const Cart = () => {
       return total + calculateProductTotal(product.quantity, product.price);
     }, 0);
   };
- 
+
   //Funcion para la ubicacion
 
   const handleShareLocation = () => {
@@ -34,7 +40,7 @@ export const Cart = () => {
       },
       (error) => {
         console.error("Error al obtener la direccion:", error.message);
-      }
+      },
     );
   };
 
@@ -55,10 +61,7 @@ export const Cart = () => {
       <div className="mt-4 px-3">
         {cart.map((product) => {
           return (
-            <div
-              className="flex flex-col bg-white p-2 "
-              key={product.id}
-            >
+            <div className="flex flex-col bg-white p-2 " key={product.id}>
               <div className="flex justify-between">
                 <span>
                   {product.nombre} x{product.quantity}
@@ -71,15 +74,18 @@ export const Cart = () => {
             </div>
           );
         })}
-        <div className="mb-2">
-            
-            <Input
-              type="text"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              label="Ingrese su nombre"
-            />
-          </div>
+        <div className="mx-3 my-2">
+          <h5>Datos de envío</h5>
+          <Input
+            type="text"
+            required
+            pattern="[a-zA-Z\s]+"
+            value={customerName}
+            onChange={(e) => handleInput(e.target.value)}
+            label="Ingrese su nombre"
+            title="Por favor, ingrese un nombre válido (solo letras y espacios)"
+          />
+        </div>
       </div>
     </>
   );
