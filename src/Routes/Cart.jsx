@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa6";
+import { FaMinus, FaPlus } from "react-icons/fa6";
 import { CartContext } from "../contexts/ShoppingCartContext";
 import { Navbar } from "./../components/Navbar";
 import { Divider, Input } from "@nextui-org/react";
 
 export const Cart = () => {
-  const [cart, setCart] = useContext(CartContext);
+  const [cart, setCart, addToCart, removeItem, getQuantityById] = useContext(CartContext);
 
   const [customerName, setCustomerName] = useState("");
   const [customerLocation, setCustomerLocation] = useState(null);
@@ -15,7 +16,6 @@ export const Cart = () => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [showNameAlertName, setShowNameAlertName] = useState(false);
   const [showNameAlertUbi, setShowNameAlertUbi] = useState(false);
-
 
   const handleInput = (inputValue) => {
     if (/^[a-zA-Z\s]*$/.test(inputValue)) {
@@ -82,6 +82,22 @@ export const Cart = () => {
                 </span>
                 <span className="font-semibold">
                   ${calculateProductTotal(product.quantity, product.price)}
+                </span>
+                <span>
+                  <button
+                    className="z-50 mr-1 rounded-md border-1 border-black"
+                    onClick={() => removeItem(product.id, product.price)}
+                  >
+                    <FaMinus className="rounded-md bg-white p-1 text-xl" />
+                  </button>
+                  <button
+                    className="z-50 rounded-md border-1 border-black"
+                    onClick={() => {
+                      addToCart(product.id, product.precio);
+                    }}
+                  >
+                    <FaPlus className="rounded-md bg-white p-1 text-xl " />
+                  </button>
                 </span>
               </div>
               <Divider orientation="horizontal" className="mt-3" />

@@ -24,8 +24,8 @@ export const Navbar = ({ customName, customerLocation, setShowNameAlertName, set
     }
   
 
-    const message = `Hola, me gustaría realizar un pedido. Cliente: ${customName}\n. Ubicación: ${
-      customerLocation ? `https://www.google.com/maps?q=${customerLocation.latitude},${customerLocation.longitude}.\n` : "No proporcionada"
+    const message = `Hola, me gustaría realizar un pedido. Cliente: ${customName}.\n Ubicación: ${
+      customerLocation ? `https://www.google.com/maps?q=${customerLocation.latitude},${customerLocation.longitude}\n` : "No proporcionada"
      } Productos: ${cart.map(
         (product) =>
           `${product.nombre} x${product.quantity} - $${(
