@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import icon from "/favicon.svg"
 export const Header = () => {
 
   return (
     <>
       <section className="flex h-24 w-full items-center justify-between px-10 bg-[#f5f5f5]">
         <h1 className="text-2xl flex justify-center items-center font-bold text-[#ED4523] pl-5">
-          <img src="./../../public/favicon.svg" alt="icon" className="pr-2" />
+          <img src={icon} alt="icon" className="pr-2" />
           Pedilo
         </h1>
         <Link
