@@ -38,14 +38,14 @@ export function Cards() {
 
 
   return (
-    <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {products.map((product, index) => (
         <Card
           className="cursor-default flex-row h-[130px] items-center"
           shadow="sm"
           key={index}
         >
-          <CardBody className="overflow-visible p-10">
+          <CardBody className="overflow-visible w-[35%]">
             {getQuantityById(product.id) > 0 &&
               <>
                 <span className="absolute right-3 top-3 z-50 rounded-full bg-white px-2">
@@ -68,13 +68,12 @@ export function Cards() {
             }
             <Image
               radius="lg"
-              width="100%"
-              alt=""
-              className="h-[100px] w-[100px] object-cover"
+              alt="producto"
+              className="h-[80px] w-[80px] object-cover"
               src={product.imagen}
             />
           </CardBody>
-          <CardFooter className="justify-between text-small">
+          <CardFooter className="justify-between text-small w-[65%]">
             <div>
 
               <b>{product.nombre}</b>
@@ -93,5 +92,6 @@ export function Cards() {
         </Card>
       ))}
     </div>
+    
   );
 }
