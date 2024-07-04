@@ -38,10 +38,10 @@ export function Cards() {
 
 
   return (
-    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {products.map((product, index) => (
         <Card
-          className="cursor-default flex-row h-[130px] items-center"
+          className="cursor-default flex-row h-[100px] items-center"
           shadow="sm"
           key={index}
         >
@@ -73,11 +73,11 @@ export function Cards() {
               src={product.imagen}
             />
           </CardBody>
-          <CardFooter className="justify-between text-small w-[65%]">
-            <div>
+          <CardFooter className="justify-between text-small w-[65%] ">
+            <div className="">
 
-              <b>{product.nombre}</b>
-              <div className="pt-5 flex gap-6">
+              <b className="">{product.nombre}</b>
+              <div className="mt-4 flex w-[90px] px-2 py-1 justify-between border border-[#EB6647] rounded-lg">
               <p className="text-default-500">${product.precio}</p>
                 <button>
                   <FaShoppingCart

@@ -9,7 +9,7 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/v1/login", {
+            const response = await axios.post("https://pediloapp.up.railway.app/v1/login", {
                 email,
                 password,
             });
