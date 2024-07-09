@@ -45,7 +45,7 @@ export function Cards() {
           shadow="sm"
           key={index}
         >
-          <CardBody className="overflow-visible w-[35%]">
+          <CardBody className="overflow-visible w-[35%] items-center">
             {getQuantityById(product.id) > 0 &&
               <>
                 <span className="absolute right-3 top-3 z-50 rounded-full bg-white px-2">

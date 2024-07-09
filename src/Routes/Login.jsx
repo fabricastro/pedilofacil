@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "/favicon.svg";
-import axios from "axios";
+import AuthContext from "../contexts/AuthContext";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/v1/login", {
-                email,
-                password,
-            });
-            // Guarda el token en el almacenamiento local o en el estado
-            localStorage.setItem("token", response.data.token);
+            await login(email, password);
             alert("Login exitoso");
+            navigate("/dashboard"); // Redirige al dashboard del usuario
         } catch (error) {
             console.error("Error al iniciar sesión:", error.response.data.message);
             alert("Credenciales inválidas");
