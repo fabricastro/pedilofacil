@@ -9,7 +9,7 @@ import { AuthProvider, AuthContext } from './contexts/AuthContext';
 
 const PrivateRoute = ({ children }) => {
   const { user } = React.useContext(AuthContext);
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/" />;
 };
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Login></Login>}></Route>
               <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} ></Route>
-              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/" element={<Navigate to="/" />} />
               <Route path="/cart" element={<Cart></Cart>} ></Route>
             </Routes>
           </AuthProvider>
