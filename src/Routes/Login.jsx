@@ -12,7 +12,12 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await login(email, password);
+            const response = await axios.post("https://pediloapp.up.railway.app/v1/login", {
+                email,
+                password,
+            });
+            // Guarda el token en el almacenamiento local o en el estado
+            localStorage.setItem("token", response.data.token);
             alert("Login exitoso");
             navigate("/dashboard"); // Redirige al dashboard del usuario
         } catch (error) {
